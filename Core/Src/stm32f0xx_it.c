@@ -56,7 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern TIM_HandleTypeDef htim3;
+
 /* USER CODE BEGIN EV */
 uint32_t TimerCounter = 15;
 uint16_t _localCounter = 0;
@@ -131,34 +131,7 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  // проверка значения
-  if (!TimerFlag)
-  {
-	  // Набор 16ти значений
-	  if(CheckLEDsCounter <= ADC_Operations)
-	  {
-		  // набор данных
-		  LEDsFlag = 0;
-		  SumValue += GlobalTempValue;
-		  CheckLEDsCounter++;
-	  }
-	  // Ожидание и сбор
-	  else
-	  {
-		  // Вывод значения (раз в 166 мс)
-		  LEDsFlag = 1;
-		  if(CheckLEDsCounter <= 166) // ожидание 150мс между измерениями
-			  CheckLEDsCounter++;
 
-		  else
-		  {
-			  SumValue = 0;
-			  LEDsFlag = 0;
-			  CheckLEDsCounter = 0;
-		  }
-
-	  }
-  }
 
   /* USER CODE END SysTick_IRQn 1 */
 }
@@ -183,29 +156,6 @@ void EXTI0_1_IRQHandler(void)
   /* USER CODE BEGIN EXTI0_1_IRQn 1 */
 
   /* USER CODE END EXTI0_1_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM3 global interrupt.
-  */
-void TIM3_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM3_IRQn 0 */
-
-  /* USER CODE END TIM3_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim3);
-  /* USER CODE BEGIN TIM3_IRQn 1 */
-  if (TimerFlag){
-
-	  _localCounter++;
-
-	  if (_localCounter > 60) {
-		  TimerCounter = TimerCounter - 1;
-		  _localCounter = 0;
-	  }
-  }
-
-  /* USER CODE END TIM3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

@@ -32,7 +32,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ADC.h"
 #include "segment_lcd.h"
 /* USER CODE END Includes */
 
@@ -76,20 +75,12 @@ void Error_Handler(void);
 #define Start_Pin GPIO_PIN_1
 #define Start_GPIO_Port GPIOA
 #define Start_EXTI_IRQn EXTI0_1_IRQn
-#define A_Pin GPIO_PIN_2
-#define A_GPIO_Port GPIOA
-#define B_Pin GPIO_PIN_3
-#define B_GPIO_Port GPIOA
-#define C_Pin GPIO_PIN_4
-#define C_GPIO_Port GPIOA
-#define E_Pin GPIO_PIN_5
-#define E_GPIO_Port GPIOA
-#define D_Pin GPIO_PIN_6
-#define D_GPIO_Port GPIOA
-#define F_Pin GPIO_PIN_7
-#define F_GPIO_Port GPIOA
-#define G_Pin GPIO_PIN_9
-#define G_GPIO_Port GPIOA
+#define CLK_Pin GPIO_PIN_3
+#define CLK_GPIO_Port GPIOA
+#define DS_Pin GPIO_PIN_4
+#define DS_GPIO_Port GPIOA
+#define Latch_Pin GPIO_PIN_5
+#define Latch_GPIO_Port GPIOA
 #define OUTPUT_Pin GPIO_PIN_10
 #define OUTPUT_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
