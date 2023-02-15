@@ -6,7 +6,7 @@
 
 // New software version for a pycnometer.
 
-// Function: segmentlights control, read a encoder data, 
+// Function: 7-segment display control, read a encoder data, 
 //           control on/off mode on a motor.
 
 // Time: minutes 
