@@ -1,18 +1,16 @@
 # Pycnometer code
+Source      : ReadMe.md <br>
+Created     : 15.02.2023 <br>
+Author      : Irina Eremkina <br>
 
-//-----------------------------------------------------------------------
-//  Source      : ReadMe.md
-//  Created     : 15.02.2023
-//  Author      : Irina Eremkina
-//-----------------------------------------------------------------------
+## Description
+New software version for a pycnometer. <br>
 
-// New software version for a pycnometer.
+Function: <br> 
+- 7-segment display control
+- read a encoder data 
+- control on/off mode on a motor.
 
-// Function: 
-// - 7-segment display control
-// - read a encoder data 
-// - control on/off mode on a motor.
-
-// Time:
-// - minutes 
+Time: <br>
+- minutes 
  
