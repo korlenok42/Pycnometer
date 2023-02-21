@@ -8,7 +8,7 @@ New software version for a pycnometer. <br>
 
 Function: <br> 
 - 7-segment display control
-- read a encoder data 
+- read an encoder data 
 - control on/off mode on a motor.
 
 Time: <br>
