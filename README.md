@@ -13,4 +13,7 @@ Function: <br>
 
 Time: <br>
 - minutes 
+
+## Version
+v2.0 - initial state
  
