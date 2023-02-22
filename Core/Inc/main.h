@@ -32,7 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "segment_lcd.h"
+#include "segment_display.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

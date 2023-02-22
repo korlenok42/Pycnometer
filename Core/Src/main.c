@@ -137,7 +137,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	  Enc_Counter = TIM3->CNT;
-
+	  HC595SendData(0xFF);
+	  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, RESET);
 
 // 	TESTS
 //  HAL_GPIO_TogglePin(DS_GPIO_Port, DS_Pin);
