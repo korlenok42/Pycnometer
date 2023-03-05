@@ -116,16 +116,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  HAL_GPIO_WritePin(DIG4_GPIO_Port, DIG4_Pin, SET);
+  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, SET);
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
   /* Rotary (Incremental) encoder */
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
-
-  HAL_GPIO_WritePin(DIG4_GPIO_Port, DIG4_Pin, SET);
-  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, SET);
-
+  SEG_LCD_WriteNumber(0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -135,10 +134,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, RESET);
 
 	  Enc_Counter = TIM3->CNT;
-	  HC595SendData(0xFF);
-	  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, RESET);
+
+
+	  SEG_LCD_Process();
+	  HAL_Delay(1);
+
+	  if(Enc_Counter == 0) SEG_LCD_WriteNumber(Enc_Counter);
+	  else SEG_LCD_WriteNumber(Enc_Counter-1);
+
+//	  HC595SendData(0xF6);
+//	  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, RESET);
 
 // 	TESTS
 //  HAL_GPIO_TogglePin(DS_GPIO_Port, DS_Pin);
