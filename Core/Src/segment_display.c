@@ -59,26 +59,24 @@ static uint8_t currentDigitIndex = 0;
 
 /* Functions -----------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
-void HC595SendData(uint8_t SendVal)
+void HC595SendData(uint8_t dig_num, uint8_t reg_count)
 {
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    /* - STEP1, serial input pin*/
-    if ((SendVal & (1 << i)) != 0 )
-      HAL_GPIO_WritePin(DS_GPIO_Port, DS_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(DS_GPIO_Port, DS_Pin, GPIO_PIN_RESET);
+   /* - STEP1, serial input pin*/
+   if ((currentCharacters[dig_num] & (1 << reg_count)) != 0 )
+     HAL_GPIO_WritePin(DS_GPIO_Port, DS_Pin, GPIO_PIN_SET);
+   else
+     HAL_GPIO_WritePin(DS_GPIO_Port, DS_Pin, GPIO_PIN_RESET);
 
     /* - STEP2, SHCP occurs once, 74HC595 will get current data from the DS pin */
     HAL_GPIO_WritePin(CLK_GPIO_Port, CLK_Pin, GPIO_PIN_RESET);
-    HAL_Delay(1);
+/*    HAL_Delay(4);
     HAL_GPIO_WritePin(CLK_GPIO_Port, CLK_Pin, GPIO_PIN_SET);
   }
 
   /* - STEP3, after all the 8-bit data of the shift register is over, the rising edge of the latch clock pin (first pull low level is high) */
-  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_RESET);
-  HAL_Delay(1);
-  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_SET);
+/*  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_RESET);
+  HAL_Delay(4);
+  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_SET);*/
 }
 
 /*----------------------------------------------------------------------------*/
@@ -119,7 +117,7 @@ SEG_LCD_Result SEG_LCD_WriteString(char* str)
     }
     for (uint8_t i = 0; i < (DIGITS_NUM - currentDigitIndex); i++)
     {
-      currentCharacters[i] = 0x00;
+      currentCharacters[i] = 0xFC;
     }
   }
   return SEG_LCD_OK;
@@ -127,7 +125,7 @@ SEG_LCD_Result SEG_LCD_WriteString(char* str)
 /*----------------------------------------------------------------------------*/
 SEG_LCD_Result SEG_LCD_WriteNumber(uint32_t number)
 {
-  char temp[DIGITS_NUM+2];
+  char temp[DIGITS_NUM];
   snprintf(temp, DIGITS_NUM+2, "%d", number);
 
 
@@ -138,28 +136,21 @@ SEG_LCD_Result SEG_LCD_WriteNumber(uint32_t number)
 }
 
 /*----------------------------------------------------------------------------*/
-void SEG_LCD_Process()
+void SEG_LCD_Process(uint8_t dig_num)
 {
   // выбор земленного пина (на землю)
-/*  for (uint8_t i = 0; i < DIGITS_NUM; i++)
+  for (uint8_t i = 0; i < DIGITS_NUM; i++)
   {
     SetOutput(digitPins[i], PIN_ACTIVE);
 	//HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, SET);
-  }*/
+  }
+
+  // SetOutput(digitPins[dig_num], PIN_ACTIVE);
 
   // выбор значения на индикаторе
-  HC595SendData(currentCharacters[currentDigitIndex]);
+  // HC595SendData(currentCharacters[dig_num]);
 
+  SetOutput(digitPins[dig_num], !PIN_ACTIVE);
 
-  //HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, RESET);
-  //SetOutput(digitPins[currentDigitIndex], !PIN_ACTIVE);
-
-  HAL_GPIO_TogglePin(DIG3_GPIO_Port, DIG3_Pin);
-  HAL_GPIO_TogglePin(DIG4_GPIO_Port, DIG4_Pin);
-  currentDigitIndex++;
-  if (currentDigitIndex == DIGITS_NUM)
-  {
-    currentDigitIndex = 0;
-  }
 }
 /*----------------------------------------------------------------------------*/

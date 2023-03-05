@@ -33,9 +33,9 @@ typedef struct McuPins
 } McuPin;
 
 /* Functions -----------------------------------------------------------------*/
-void HC595SendData(uint8_t SendVal);
+extern void HC595SendData(uint8_t dig_num, uint8_t reg_count);
 /* Functions -----------------------------------------------------------------*/
-extern void SEG_LCD_Process();
+extern void SEG_LCD_Process(uint8_t dig_num);
 extern SEG_LCD_Result SEG_LCD_WriteNumber(uint32_t number);
 extern SEG_LCD_Result SEG_LCD_WriteString(char* str);
 

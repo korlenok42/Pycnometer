@@ -56,8 +56,11 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
+uint8_t LED_Counter = 0;
+uint8_t Data_num = 0;
+
 uint32_t TimerCounter = 15;
 uint16_t _localCounter = 0;
 /* USER CODE END EV */
@@ -156,6 +159,56 @@ void EXTI0_1_IRQHandler(void)
   /* USER CODE BEGIN EXTI0_1_IRQn 1 */
 
   /* USER CODE END EXTI0_1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+
+  /* USER CODE END TIM2_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim2);
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  if(LEDsFlag)
+  {
+	  if(Reg_Counter == 0)
+	  {
+		  HAL_GPIO_WritePin(CLK_GPIO_Port, CLK_Pin, GPIO_PIN_SET);
+		  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_SET);
+		  LEDsFlag = 0;
+	  }
+
+	   if((Reg_Counter == 0 || Reg_Counter % 2 == 0) && Data_num < 8)
+	   {
+	  	  HC595SendData(LED_Counter, Data_num);
+	  	  Data_num++;
+	   }
+	   else
+	   {
+		   HAL_GPIO_WritePin(CLK_GPIO_Port, CLK_Pin, GPIO_PIN_SET);
+	   }
+
+	   Reg_Counter++;
+
+
+	   if(Data_num == 8)
+	   {
+	  	  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_RESET);
+	  	  Data_num = 0;
+
+	  	  Reg_Counter = 0;
+
+
+		  LED_Counter++;
+	   }
+
+	   if(LED_Counter >= DIGITS_NUM) { LED_Counter = 0; EncoderFlag = 1;}
+  }
+
+  /* USER CODE END TIM2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
