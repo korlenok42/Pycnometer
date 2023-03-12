@@ -85,6 +85,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	  HAL_GPIO_WritePin(OUTPUT_GPIO_Port, OUTPUT_Pin, RESET);
   }
 
+  else if(GPIO_Pin == ENC_BUT_Pin){
+	  __HAL_TIM_SET_COUNTER(&htim3, 30);
+  }
+
 //    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);}
     else{
 
@@ -109,7 +113,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-   HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -162,7 +166,7 @@ int main(void)
 
 	  if(EncoderFlag)
 	  {
-		  SEG_LCD_WriteNumber(Enc_Counter/2);
+		  SEG_LCD_WriteNumber((int)Enc_Counter/2);
 		  EncoderFlag = 0;
 	  }
 
@@ -287,7 +291,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 198;
+  htim3.Init.Period = 200;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
@@ -347,11 +351,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(Stop_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : Start_Pin */
-  GPIO_InitStruct.Pin = Start_Pin;
+  /*Configure GPIO pins : Start_Pin ENC_BUT_Pin */
+  GPIO_InitStruct.Pin = Start_Pin|ENC_BUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(Start_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CLK_Pin DS_Pin Latch_Pin OUTPUT_Pin */
   GPIO_InitStruct.Pin = CLK_Pin|DS_Pin|Latch_Pin|OUTPUT_Pin;
@@ -363,6 +367,9 @@ static void MX_GPIO_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
 

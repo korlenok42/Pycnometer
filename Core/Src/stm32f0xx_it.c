@@ -162,6 +162,20 @@ void EXTI0_1_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles EXTI line 4 to 15 interrupts.
+  */
+void EXTI4_15_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
+
+  /* USER CODE END EXTI4_15_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
+  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
+
+  /* USER CODE END EXTI4_15_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM2 global interrupt.
   */
 void TIM2_IRQHandler(void)
@@ -176,6 +190,9 @@ void TIM2_IRQHandler(void)
   {
 	  if(Reg_Counter == 0)
 	  {
+		  HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, SET);
+		  HAL_GPIO_WritePin(DIG4_GPIO_Port, DIG4_Pin, SET);
+
 		  HAL_GPIO_WritePin(CLK_GPIO_Port, CLK_Pin, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(Latch_GPIO_Port, Latch_Pin, GPIO_PIN_SET);
 		  LEDsFlag = 0;

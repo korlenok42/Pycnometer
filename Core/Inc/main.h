@@ -89,6 +89,9 @@ void Error_Handler(void);
 #define DS_GPIO_Port GPIOA
 #define Latch_Pin GPIO_PIN_5
 #define Latch_GPIO_Port GPIOA
+#define ENC_BUT_Pin GPIO_PIN_9
+#define ENC_BUT_GPIO_Port GPIOA
+#define ENC_BUT_EXTI_IRQn EXTI4_15_IRQn
 #define OUTPUT_Pin GPIO_PIN_10
 #define OUTPUT_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
