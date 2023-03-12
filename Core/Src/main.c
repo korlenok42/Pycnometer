@@ -46,20 +46,20 @@ TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN PV */
 
 /* Enc. vars */
-uint8_t Enc_Counter = 0;
+
 uint8_t Reg_Counter = 0;
+uint8_t TimerCounter = 0;
 
 uint8_t StartFlag = 0;
 
+uint8_t IndicatorsFlag = 0;
 
-uint8_t EncoderFlag = 0;
-
-uint32_t TimerFlag = 0;
+uint8_t TimerFlag = 0;
 uint16_t GlobalTempValue = 0;
 uint8_t LEDsFlag = 0;
-uint16_t SumValue = 0;
-uint16_t CheckLEDsCounter = 0;
-int ADC_BufMean = 0;  					// get average ADC val
+
+
+				// get average ADC val
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,23 +73,22 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t ReadADCvalue;
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+  // Start button "on" - start timer
   if(GPIO_Pin == Start_Pin) TimerFlag = 1;
 
+  // Reset button "on" - reset timer
   else if(GPIO_Pin == Stop_Pin) {
 	  TimerFlag = 0;
-	  TimerCounter = TimStart;
 	  HAL_GPIO_WritePin(OUTPUT_GPIO_Port, OUTPUT_Pin, RESET);
   }
 
+  // Encoder button "on" - set 15 minutes
   else if(GPIO_Pin == ENC_BUT_Pin){
 	  __HAL_TIM_SET_COUNTER(&htim3, 30);
   }
 
-//    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);}
     else{
 
     __NOP();
@@ -131,18 +130,20 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  uint8_t _StartValue = 0;
+  uint8_t _Enc_Counter = 0;
 
   /* Rotary (Incremental) encoder */
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
+  /* Sent data to HC595 and show number on LEDs*/
   HAL_TIM_Base_Start_IT(&htim2);
 
+  // Reset LEDs
   HAL_GPIO_WritePin(DIG3_GPIO_Port, DIG3_Pin, SET);
   HAL_GPIO_WritePin(DIG4_GPIO_Port, DIG4_Pin, SET);
 
-//  SEG_LCD_WriteNumber(0);
 
-  //HC595SendData(0xFF);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -153,22 +154,41 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-
-	  Enc_Counter = TIM3->CNT;
-
 	  if(!LEDsFlag && (LED_Counter < DIGITS_NUM))
 	  {
-		  LEDsFlag = 1;
+	  	  LEDsFlag = 1;
 
-		  if(StartFlag) SEG_LCD_Process(LED_Counter);
-		  if(!StartFlag) StartFlag = 1;
+	  	  if(StartFlag) SEG_LCD_Process(LED_Counter);
+	  	  if(!StartFlag) StartFlag = 1;
 	  }
 
-	  if(EncoderFlag)
+	  if(IndicatorsFlag && !TimerFlag)
 	  {
-		  SEG_LCD_WriteNumber((int)Enc_Counter/2);
-		  EncoderFlag = 0;
+		  // Read encoder data
+		  _Enc_Counter = TIM3->CNT;
+		  _StartValue = _Enc_Counter/2;
+		  TimerCounter = _StartValue;
+	  	  SEG_LCD_WriteNumber(_StartValue);
+	  	  IndicatorsFlag = 0;
 	  }
+
+	  else if (IndicatorsFlag && TimerFlag)
+	  {
+		  if (TimerCounter == _StartValue) HAL_GPIO_WritePin(OUTPUT_GPIO_Port, OUTPUT_Pin, SET);
+
+		  if (TimerCounter == 0)
+		  {
+		  		TimerFlag = 0;
+		  		HAL_GPIO_WritePin(OUTPUT_GPIO_Port, OUTPUT_Pin, RESET);
+		  }
+
+		  SEG_LCD_WriteNumber(TimerCounter);
+		  IndicatorsFlag = 0;
+
+	  }
+
+	  else {__NOP();}
+
 
 	  //else
 	//

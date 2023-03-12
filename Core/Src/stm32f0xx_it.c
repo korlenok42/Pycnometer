@@ -61,7 +61,7 @@ extern TIM_HandleTypeDef htim2;
 uint8_t LED_Counter = 0;
 uint8_t Data_num = 0;
 
-uint32_t TimerCounter = 15;
+
 uint16_t _localCounter = 0;
 /* USER CODE END EV */
 
@@ -135,6 +135,16 @@ void SysTick_Handler(void)
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
+  if (TimerFlag){
+
+	  _localCounter++;
+
+	  // a minute
+	  if (_localCounter > 1000) {
+		  TimerCounter = TimerCounter - 1;
+		  _localCounter = 0;
+	  }
+  }
 
   /* USER CODE END SysTick_IRQn 1 */
 }
@@ -222,7 +232,7 @@ void TIM2_IRQHandler(void)
 		  LED_Counter++;
 	   }
 
-	   if(LED_Counter >= DIGITS_NUM) { LED_Counter = 0; EncoderFlag = 1;}
+	   if(LED_Counter >= DIGITS_NUM) { LED_Counter = 0; IndicatorsFlag = 1;}
   }
 
   /* USER CODE END TIM2_IRQn 1 */

@@ -42,21 +42,18 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-extern uint32_t TimerCounter;
-
-extern uint8_t Enc_Counter;
+extern uint8_t TimerCounter;
 
 extern uint8_t LED_Counter;
 extern uint8_t Reg_Counter;
 
-extern uint8_t EncoderFlag;
+extern uint8_t IndicatorsFlag;
 
-extern uint32_t TimerFlag;
+extern uint8_t TimerFlag;
 extern uint8_t LEDsFlag;
-extern int ADC_BufMean;
+
 extern uint16_t GlobalTempValue;
-extern uint16_t CheckLEDsCounter;
-extern uint16_t SumValue;
+
 
 /* USER CODE END EC */
 
